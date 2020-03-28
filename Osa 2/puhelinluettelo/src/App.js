@@ -1,34 +1,54 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 import Filter from './components/Filter'
+import personService from './services/persons'
+
 
 const App = () => {
 
- const [persons, setPersons] = useState([])
-  const [shownPersons, setShown] = useState([])
+const [persons, setPersons] = useState([])
+const [shownPersons, setShown] = useState([])
+const [message, setMessage] = useState()
+const [messageType, setMessageType] = useState()
 
-
- const hook = () => {
-axios.get('http://localhost:3001/persons').then(response => {
-  setPersons(response.data);
-  setShown(response.data)
-  console.log(response.data)
-});
+const setAndRenderPersons = (persons) => {
+  setPersons(persons)
+  setShown(persons)
 }
-useEffect(hook, [])
+
+const setMessageTypeAndContent = (type, content) => {
+    setMessageType(type)
+    setMessage(content)
+}
+
+useEffect(() => { personService.getAll().then(initialNames => {
+   setAndRenderPersons(initialNames)
+   
+ }) 
+ }, [])
+
+ const deletePerson = (event) => {
+   const result = window.confirm(`Delete ${event.target.name}?`)
+   if (result) {
+     personService.remove(event.target.value)
+     const copy = persons.filter(person => person.id !== Number(event.target.value))     
+     setAndRenderPersons(copy)
+     setMessageTypeAndContent('info', `Removed ${event.target.name}`)
+   };
+ }
+
 
   
-
   return (
     <div>
       <h1>Phonebook</h1>
-
+      <Notification message={message} messageType={messageType} />
       <Filter persons={persons} setShown={setShown} />
-      <PersonForm persons={persons} setPersons={setPersons} setShown={setShown}/> 
+      <PersonForm persons={persons} setAndRenderPersons={setAndRenderPersons} setMessageTypeAndContent={setMessageTypeAndContent}/> 
       <h2>Numbers</h2>
-      {shownPersons.map(person => <Persons name={person.name} number={person.number} key={person.name}/>)}
+      {shownPersons.map(person => <Persons person={person} deletePerson={deletePerson}/>)}
   </div>
       )
   }

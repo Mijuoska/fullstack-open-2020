@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import Weather from './components/Weather'
+import './index.css'
+
 
 const App = () => {
 
@@ -30,7 +32,7 @@ useEffect(getCountries, [])
   }
 
   const showCountryButton = (event) => {
-    const country = results.filter(country => country.name === event.target.value)
+    const country = results.find(country => country.name === event.target.value)
     showResults(country)
   }
 

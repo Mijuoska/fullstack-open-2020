@@ -1,8 +1,7 @@
 import React, { useState } from "react"
+import personService from '../services/persons'
 
-
-
-const PersonForm = ({ persons, setPersons, setShown }) => {
+const PersonForm = ({ persons, setAndRenderPersons, setMessageTypeAndContent }) => {
 
 const [newName, setNewName] = useState('')
 const [newNumber, setNewNumber] = useState('')
@@ -11,20 +10,36 @@ const [newNumber, setNewNumber] = useState('')
         
           event.preventDefault()
           const match = persons.filter(person => person.name === newName)
-
+          
           if (match.length > 0) {
-              alert(`${newName} is already added to the phonebook`)
-          } else {
+             const result = window.confirm(`${newName} already exists in the phonebook. Add a new number?`)
+             if (result) {
+             const personObject = {...match[0], number: newNumber}
+             personService.update(personObject, personObject.id).then(returnedPerson => {
+               const copy = persons.filter(person => person.id !== personObject.id)        
+               setAndRenderPersons(copy.concat(returnedPerson))     
+               setMessageTypeAndContent('info', `Edited ${returnedPerson.name}`)
+              console.log(`Edited ${returnedPerson.name}`)
+             }).catch(error => {
+               console.log(`${error}: Tried to edit a person who no longer exists: ${newName}`)
+               setMessageTypeAndContent('error', `${newName} has already been removed from the server`)
+        
+             })
+          }
+            } else {
               const personObject = {
                   name: newName,
                   number: newNumber
-              }
+              }          
               
-            const newPersons = persons.concat(personObject)
-              
-              setPersons(newPersons)
-              setShown(newPersons)
-
+              personService.create(personObject).then(returnedPerson => {
+                setAndRenderPersons(persons.concat(returnedPerson))
+                setMessageTypeAndContent('info', `Added ${returnedPerson.name}`)
+              }).catch(error => {
+                setMessageTypeAndContent('error', `Something went wrong while adding the person ${personObject.name}`)
+                console.log(`Something went wrong while adding the person ${personObject.name}: ${error}`)
+              });
+             
           }
           
           setNewName('')
