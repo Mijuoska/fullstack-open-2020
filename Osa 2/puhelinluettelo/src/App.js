@@ -36,7 +36,7 @@ useEffect(() => { personService.getAll().then(initialNames => {
      const copy = persons.filter(person => person.id !== event.target.value)  
      setAndRenderPersons(copy)
      setMessageTypeAndContent('info', `Removed ${event.target.name}`)
-   };
+   }
  }
 
 

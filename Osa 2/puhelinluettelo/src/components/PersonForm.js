@@ -19,7 +19,6 @@ const [newNumber, setNewNumber] = useState('')
                const copy = persons.filter(person => person.id !== personObject.id)        
                setAndRenderPersons(copy.concat(returnedPerson))     
                setMessageTypeAndContent('info', `Edited ${returnedPerson.name}`)
-              console.log(`Edited ${returnedPerson.name}`)
              }).catch(error => {
                console.log(error.response.data.error)
                setMessageTypeAndContent('error', error.response.data.error)
