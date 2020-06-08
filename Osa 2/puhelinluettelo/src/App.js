@@ -33,7 +33,7 @@ useEffect(() => { personService.getAll().then(initialNames => {
    const result = window.confirm(`Delete ${event.target.name}?`)
    if (result) {
      personService.remove(event.target.value)
-     const copy = persons.filter(person => person.id !== Number(event.target.value))     
+     const copy = persons.filter(person => person.id !== event.target.value)  
      setAndRenderPersons(copy)
      setMessageTypeAndContent('info', `Removed ${event.target.name}`)
    };
@@ -48,7 +48,7 @@ useEffect(() => { personService.getAll().then(initialNames => {
       <Filter persons={persons} setShown={setShown} />
       <PersonForm persons={persons} setAndRenderPersons={setAndRenderPersons} setMessageTypeAndContent={setMessageTypeAndContent}/> 
       <h2>Numbers</h2>
-      {shownPersons.map(person => <Persons person={person} deletePerson={deletePerson}/>)}
+      {shownPersons.map(person => <Persons person={person} key={person.id} deletePerson={deletePerson}/>)}
   </div>
       )
   }

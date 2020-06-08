@@ -21,8 +21,8 @@ const [newNumber, setNewNumber] = useState('')
                setMessageTypeAndContent('info', `Edited ${returnedPerson.name}`)
               console.log(`Edited ${returnedPerson.name}`)
              }).catch(error => {
-               console.log(`${error}: Tried to edit a person who no longer exists: ${newName}`)
-               setMessageTypeAndContent('error', `${newName} has already been removed from the server`)
+               console.log(error.response.data.error)
+               setMessageTypeAndContent('error', error.response.data.error)
         
              })
           }
@@ -36,8 +36,8 @@ const [newNumber, setNewNumber] = useState('')
                 setAndRenderPersons(persons.concat(returnedPerson))
                 setMessageTypeAndContent('info', `Added ${returnedPerson.name}`)
               }).catch(error => {
-                setMessageTypeAndContent('error', `Something went wrong while adding the person ${personObject.name}`)
-                console.log(`Something went wrong while adding the person ${personObject.name}: ${error}`)
+                setMessageTypeAndContent('error', `Something went wrong while adding the person ${personObject.name}: ${error.response.data.error}`)
+                console.log(error.response.data.error)
               });
              
           }
