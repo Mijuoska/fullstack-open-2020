@@ -33,7 +33,7 @@ useEffect(() => { personService.getAll().then(initialNames => {
    const result = window.confirm(`Delete ${event.target.name}?`)
    if (result) {
      personService.remove(event.target.value)
-     const copy = persons.filter(person => person.id !== event.target.value)  
+     const copy = persons.filter(person => person.id !== Number(event.target.value))  
      setAndRenderPersons(copy)
      setMessageTypeAndContent('info', `Removed ${event.target.name}`)
    }
