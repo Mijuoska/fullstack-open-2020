@@ -67,7 +67,7 @@ else if (results.length <= 10 && results.length > 1) {
     <p>Population: {results[0].population}</p>
     <h3>Languages</h3>
 <ul>
-{results[0].languages.map(language => <li>{language.name}</li>)}
+{results[0].languages.map(language => <li key={language.name}>{language.name}</li>)}
 </ul>
 <img src={results[0].flag} alt={results[0].name} width={150} height={100}/>
 <Weather country={results[0].name} city={results[0].capital} />

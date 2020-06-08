@@ -9,12 +9,11 @@ const Weather = ({ city }) => {
 const api_key = process.env.REACT_APP_API_KEY
 useEffect(() => { axios.get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${city}`)
     .then(response => {
-        console.log(response.data)
         setWeather(response.data)
         setIsLoading(false)
 
     });
-}, [city])
+}, [city, api_key])
     
 
          if (isLoading) {
